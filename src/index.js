@@ -1,4 +1,3 @@
-const composeMethodName = 'reactComponent';
 const suffixToRemove = 'Container';
 
 function addDisplayName(t, varName) {
@@ -17,13 +16,14 @@ function addDisplayName(t, varName) {
 export default function build({ types: t }) {
   return {
     visitor: {
-      VariableDeclaration(path) {
+      VariableDeclaration(path, state) {
         if (1 === path.node.declarations.length) {
           const declarator = path.node.declarations[0];
           if (t.isIdentifier(declarator.id)) {
             const varName = declarator.id.name;
             const initExpression = declarator.init;
-            if (t.isCallExpression(initExpression) && composeMethodName === initExpression.callee.name) {
+            const { methodName } = state.opts;
+            if (t.isCallExpression(initExpression) && methodName === initExpression.callee.name) {
               const statementPath = t.isExportNamedDeclaration(path.parentPath) ? path.parentPath : path;
               statementPath.insertAfter(addDisplayName(t, varName));
             }
