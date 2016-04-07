@@ -1,7 +1,8 @@
-# Babel Plugin to add displayName to composed component
-[![npm version](https://img.shields.io/npm/v/babel-plugin-transform-react-compose-displayname.svg?style=flat-square)](https://www.npmjs.com/package/babel-plugin-transform-react-compose-displayname)
+# Babel Plugin to add displayName to a component
 
-Automatically add a displayName to a composed component (using reactStamp or other compose function).
+![npm version](https://img.shields.io/npm/v/babel-plugin-transform-react-compose-displayname.svg?style=flat-square)](https://www.npmjs.com/package/babel-plugin-transform-react-compose-displayname)
+
+Automatically add a displayName to a component created by composition, using [reactStamp](https://github.com/stampit-org/react-stamp) or another function.
 
 ## Example
 
@@ -51,7 +52,7 @@ You can specify options:
   "env": {
     "production": {
       "plugins": [
-        ["transform-react-compose-displayname", {methodName: 'compose']
+        ["transform-react-compose-displayname", \{methodName: 'compose'}]
       ]
     }
   }
