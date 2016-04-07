@@ -26,7 +26,7 @@ export default function build({types: t}) {
                             if (t.isMemberExpression(initExpression.callee)) {
                                 callee = callee.object.callee;
                             }
-                            if (methodName === callee.name) {
+                            if (callee && methodName === callee.name) {
                                 const statementPath = t.isExportNamedDeclaration(path.parentPath) ? path.parentPath : path;
                                 statementPath.insertAfter(addDisplayNameStatement(t, varName));
                             }
