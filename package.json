@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hgiraud/babel-plugin-transform-react-compose-displayname.git"
+    "url": "git+https://github.com/giraud/babel-plugin-transform-react-compose-displayname.git"
   },
   "main": "lib/index.js",
   "scripts": {
