@@ -1,32 +1,49 @@
-import { transform } from 'babel-core';
-import test from 'ava';
+import {transform} from 'babel-core';
+import assert from 'assert';
 
-function transformCode(code, methodName = 'reactStamp') {
-  return transform(code, { presets: ['es2015'], plugins: [['../lib/index.js', {methodName}]] });
+function transformCode(code, methodName) {
+    return transform(code, {
+        presets: ['es2015'],
+        plugins: [['./src/index.js', {methodName}]]
+    });
 }
 
 function lastLine(code) {
-  console.log('returned', code);
-  return code.substring(code.lastIndexOf('\n') + 1);
+    return code.substring(code.lastIndexOf('\n') + 1);
 }
 
-test('Generate displayName', (t) => {
-  const code = 'const myComponent = reactStamp(React).compose({});';
-  const result = lastLine(transformCode(code).code);
+describe('Using reactStamp method', () => {
 
-  t.is(result, 'myComponent.displayName = "myComponent";');
+    describe('with const', () => {
+        it('should generate displayName with reactStamp only', () => {
+            const code = 'const myComponent = reactStamp(React);';
+            const result = lastLine(transformCode(code, 'reactStamp').code);
+            assert.equal(result, 'myComponent.displayName = "myComponent";');
+        });
+        it('should generate displayName with compose call', () => {
+            const code = 'const myComponent = reactStamp(React).compose({});';
+            const result = lastLine(transformCode(code, 'reactStamp').code);
+            assert.equal(result, 'myComponent.displayName = "myComponent";');
+        });
+    });
+
+    describe('with named export', () => {
+        it('should generate displayName', () => {
+            const code = 'export const myExportComponent = reactStamp(React).compose({});';
+            const result = lastLine(transformCode(code, 'reactStamp').code);
+
+            assert.equal(result, 'myExportComponent.displayName = "myExportComponent";');
+        });
+    });
 });
 
-test('Generate displayName for named export', (t) => {
-  const code = 'export const myComponent = reactStamp(React).compose({});';
-  const result = lastLine(transformCode(code).code);
+describe('Using a compose method', () => {
 
-  t.is(result, 'myComponent.displayName = "myComponent";');
-});
+    it('should generate displayName', () => {
+        const code = 'export const myComponent = reactCompose({});';
+        const result = lastLine(transformCode(code, 'reactCompose').code);
 
-test('Generate displayName for other factory method', (t) => {
-  const code = 'export const myComponent = reactCompose({});';
-  const result = lastLine(transformCode(code).code, 'reactCompose');
+        assert.equal(result, 'myComponent.displayName = "myComponent";');
+    });
 
-  t.is(result, 'myComponent.displayName = "myComponent";');
 });
