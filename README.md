@@ -53,7 +53,7 @@ You can specify options:
     "production": {
       "plugins": [
         ["transform-react-compose-displayname", { 
-          methodName: 'compose' 
+          "methodName": "compose"
         }]
       ]
     }
