@@ -52,8 +52,8 @@ You can specify options:
   "env": {
     "production": {
       "plugins": [
-        ["transform-react-compose-displayname", { 
-          "methodName": "compose"
+        ["transform-react-compose-displayname", {
+          "methodNames": ["compose"]
         }]
       ]
     }
