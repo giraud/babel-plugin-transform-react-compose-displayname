@@ -47,3 +47,25 @@ describe('Using a compose method', () => {
     });
 
 });
+
+describe('identifierExpression', () => {
+
+    it('should not generate displayName and not fail', () => {
+        const code = 'const y = "string";';
+        const result = lastLine(transformCode(code, 'compose').code);
+
+        assert.equal(result, 'var y = "string";');
+    });
+
+});
+
+describe('memberExpression', () => {
+
+    it('should not generate displayName and not fail', () => {
+        const code = 'const x = obj.func();';
+        const result = lastLine(transformCode(code, 'compose').code);
+
+        assert.equal(result, 'var x = obj.func();');
+    });
+
+});

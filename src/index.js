@@ -20,13 +20,13 @@ export default function build({types: t}) {
                     if (t.isIdentifier(declarator.id)) {
                         const varName = declarator.id.name;
                         const initExpression = declarator.init;
-                        const {methodName} = state.opts;
-                        if (t.isCallExpression(initExpression)) {
+                        const {methodName = 'reactStamp'} = state.opts;
+                        if (methodName && t.isCallExpression(initExpression)) {
                             let callee = initExpression.callee;
                             if (t.isMemberExpression(initExpression.callee)) {
                                 callee = callee.object.callee;
                             }
-                            if (methodName === callee.name) {
+                            if (callee && methodName === callee.name) {
                                 const statementPath = t.isExportNamedDeclaration(path.parentPath) ? path.parentPath : path;
                                 statementPath.insertAfter(addDisplayNameStatement(t, varName));
                             }
