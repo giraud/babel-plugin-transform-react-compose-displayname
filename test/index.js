@@ -1,10 +1,10 @@
-import {transform} from 'babel-core';
+import {transform} from '@babel/core';
 import assert from 'assert';
 
 function transformCode(code, methodNames) {
     return transform(code, {
-        presets: ['es2015'],
-        plugins: [['./src/index.js', {methodNames}]]
+        presets: ['@babel/env'],
+        plugins: [['./src/index.cjs', {methodNames}]]
     });
 }
 
