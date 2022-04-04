@@ -1,7 +1,7 @@
 {
     "name": "babel-plugin-transform-react-compose-displayname",
-    "version": "1.0.6",
-    "description": "Babel plugin to add displayName to a compose function",
+    "version": "2.0.0",
+    "description": "private Babel plugin",
     "author": "herve Giraud",
     "license": "MIT",
     "repository": {
@@ -14,7 +14,7 @@
         "build": "babel src -d lib",
         "test": "mocha --require @babel/register",
         "test:watch": "npm run test -- --watch",
-        "prepublish": "npm run clean && npm run build && npm test"
+        "prepare": "npm run clean && npm run build && npm test"
     },
     "devDependencies": {
         "@babel/cli": "^7.0.0",

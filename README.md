@@ -1,4 +1,4 @@
-Internal babel plugin that can:
+Private babel plugin that can:
 - rewrite memoization function to add key based on module/function name 
 - (_obsolete_) add a displayName to a component created by composition, using [reactStamp](https://github.com/stampit-org/react-stamp) or another function.
 
