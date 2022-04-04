@@ -1,31 +1,58 @@
-import {transform} from '@babel/core';
-import assert from 'assert';
+import {transform} from "@babel/core";
+import assert from "assert";
 
 function transformCode(code, methodNames) {
     return transform(code, {
-        presets: ['@babel/env'],
-        plugins: [['./src/index.cjs', {methodNames}]]
+        presets: ["@babel/env"],
+        plugins: [["./src/index.js", {methodNames}]],
     });
 }
 
 function lines(code) {
-    return code.split('\n');
+    return code.split("\n");
 }
 
 function lastLine(code) {
-    return code.substring(code.lastIndexOf('\n') + 1);
+    return code.substring(code.lastIndexOf("\n") + 1);
 }
+
+function flatten(code) {
+    return code.replace('"use strict";', '').split('\n').map(x => x.trim()).join('');
+}
+
+describe("Memoization", () => {
+    it("should rewrite for one param", () => {
+        let code = "function getPerspectives(store) { return Reselect.memoize1(store.perspectives, function (param) { return param; }); }";
+        let result = flatten(transformCode(code, [""]).code);
+        assert.equal(result,
+            'function getPerspectives(store) {return Reselect.memoize("Unknown:getPerspectives", [store.perspectives], function (param) {return param;});}');
+    });
+
+    it("should rewrite for many params", () => {
+        let code = "function getXxx(store) { return Reselect.memoize3(in1, in2(y), in3, () => { return _; }); }";
+        let result = flatten(transformCode(code, [""]).code);
+        assert.equal(result,
+            'function getXxx(store) {return Reselect.memoize("Unknown:getXxx", [in1, in2(y), in3], function () {return _;});}');
+    });
+
+    it("should rewrite with extra params added", () => {
+        let code = "var getX = function(a) { return function(store) { return Reselect.memoize1(store.in, function() { return b; }); }; };";
+        let result = flatten(transformCode(code, [""]).code);
+        assert.equal(result,
+            'var getX = function getX(a) {return function (store) {return Reselect.memoize("Unknown:getX", [a, store["in"]], function () {return b;});};};');
+    });
+});
 
 describe('Using reactStamp method', () => {
 
     describe('with const', () => {
         it('should generate displayName with reactStamp only', () => {
-            const code = 'const myComponent = reactStamp(React);';
-            const result = lastLine(transformCode(code, ['reactStamp']).code);
+            let code = 'const myComponent = reactStamp(React);';
+            let result = lastLine(transformCode(code, ['reactStamp']).code);
             assert.equal(result, 'myComponent.displayName = "myComponent";');
         });
         it('should generate displayName with compose call', () => {
-            const code = 'const myComponent = reactStamp(React).compose({});';
+            let code = 'const myComponent = reactStamp(React).compose({});';
             const result = lastLine(transformCode(code, ['reactStamp']).code);
             assert.equal(result, 'myComponent.displayName = "myComponent";');
         });

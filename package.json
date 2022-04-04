@@ -1,27 +1,27 @@
 {
-  "name": "babel-plugin-transform-react-compose-displayname",
-  "version": "1.0.6",
-  "description": "Babel plugin to add displayName to a compose function",
-  "author": "herve Giraud",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/giraud/babel-plugin-transform-react-compose-displayname.git"
-  },
-  "main": "lib/index.cjs",
-  "scripts": {
-    "clean": "rimraf lib",
-    "build": "babel src -d lib",
-    "test": "mocha --require @babel/register",
-    "test:watch": "npm run test -- --watch",
-    "prepublish": "npm run clean && npm run build && npm test"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/cli": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "mocha": "^9.0.0",
-    "rimraf": "^3.0.0"
-  }
+    "name": "babel-plugin-transform-react-compose-displayname",
+    "version": "1.0.6",
+    "description": "Babel plugin to add displayName to a compose function",
+    "author": "herve Giraud",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/giraud/babel-plugin-transform-react-compose-displayname.git"
+    },
+    "main": "lib/index.js",
+    "scripts": {
+        "clean": "rimraf lib",
+        "build": "babel src -d lib",
+        "test": "mocha --require @babel/register",
+        "test:watch": "npm run test -- --watch",
+        "prepublish": "npm run clean && npm run build && npm test"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.0.0",
+        "@babel/core": "^7.0.0",
+        "@babel/preset-env": "^7.0.0",
+        "@babel/register": "^7.0.0",
+        "mocha": "^9.0.0",
+        "rimraf": "^3.0.0"
+    }
 }
