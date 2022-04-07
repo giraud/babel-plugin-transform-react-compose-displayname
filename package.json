@@ -2,7 +2,7 @@
     "name": "babel-plugin-transform-react-compose-displayname",
     "version": "2.1.0",
     "description": "private Babel plugin",
-    "author": "herve Giraud",
+    "author": "Herve Giraud",
     "license": "MIT",
     "repository": {
         "type": "git",
