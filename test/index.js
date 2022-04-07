@@ -36,10 +36,10 @@ describe("Memoization", () => {
     });
 
     it("should rewrite with extra params added", () => {
-        let code = "var getX = function(a) { return function(store) { return Reselect.memoize1(store.in, function() { return b; }); }; };";
+        let code = "var getX = function(extra1, extra2) { return function(store) { return Reselect.memoize1(store.in, function() { return b; }); }; };";
         let result = flatten(transformCode(code, [""]).code);
         assert.equal(result,
-            'var getX = function getX(a) {return function (store) {return Reselect.memoize("Unknown:getX", [a, store["in"]], function () {return b;});};};');
+            'var getX = function getX(extra1, extra2) {return function (store) {return Reselect.memoize("Unknown:getX", [store["in"], extra1, extra2], function () {return b;});};};');
     });
 });
 

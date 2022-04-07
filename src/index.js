@@ -60,9 +60,10 @@ export default function build({types: t}) {
                                     // anonymous with grandParent
                                     let functionName = name;
 
-                                    let inputs = extraParams.concat(path.node.arguments);
+                                    let inputs = [].concat(path.node.arguments); // create new array
                                     let computeFunction = inputs.pop();
-                                    let newArgs = [t.stringLiteral(moduleName + ':' + functionName), t.arrayExpression(inputs), computeFunction];
+                                    let newInputs = inputs.concat(extraParams);
+                                    let newArgs = [t.stringLiteral(moduleName + ':' + functionName), t.arrayExpression(newInputs), computeFunction];
 
                                     path.replaceWith(t.callExpression( //
                                         t.memberExpression(t.identifier('Reselect'), t.identifier('memoize')), newArgs));
