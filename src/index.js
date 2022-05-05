@@ -62,8 +62,7 @@ export default function build({types: t}) {
 
                                     let inputs = [].concat(path.node.arguments); // create new array
                                     let computeFunction = inputs.pop();
-                                    let newInputs = inputs.concat(extraParams);
-                                    let newArgs = [t.stringLiteral(moduleName + ':' + functionName), t.arrayExpression(newInputs), computeFunction];
+                                    let newArgs = [t.stringLiteral(moduleName + ':' + functionName), t.arrayExpression(extraParams), t.arrayExpression(inputs), computeFunction];
 
                                     path.replaceWith(t.callExpression( //
                                         t.memberExpression(t.identifier('Reselect'), t.identifier('memoize')), newArgs));

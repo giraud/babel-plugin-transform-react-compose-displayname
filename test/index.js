@@ -25,21 +25,21 @@ describe("Memoization", () => {
         let code = "function getPerspectives(store) { return Reselect.memoize1(store.perspectives, function (param) { return param; }); }";
         let result = flatten(transformCode(code, [""]).code);
         assert.equal(result,
-            'function getPerspectives(store) {return Reselect.memoize("Unknown:getPerspectives", [store.perspectives], function (param) {return param;});}');
+            'function getPerspectives(store) {return Reselect.memoize("Unknown:getPerspectives", [], [store.perspectives], function (param) {return param;});}');
     });
 
     it("should rewrite for many params", () => {
         let code = "function getXxx(store) { return Reselect.memoize3(in1, in2(y), in3, () => { return _; }); }";
         let result = flatten(transformCode(code, [""]).code);
         assert.equal(result,
-            'function getXxx(store) {return Reselect.memoize("Unknown:getXxx", [in1, in2(y), in3], function () {return _;});}');
+            'function getXxx(store) {return Reselect.memoize("Unknown:getXxx", [], [in1, in2(y), in3], function () {return _;});}');
     });
 
     it("should rewrite with extra params added", () => {
         let code = "var getX = function(extra1, extra2) { return function(store) { return Reselect.memoize1(store.in, function() { return b; }); }; };";
         let result = flatten(transformCode(code, [""]).code);
         assert.equal(result,
-            'var getX = function getX(extra1, extra2) {return function (store) {return Reselect.memoize("Unknown:getX", [store["in"], extra1, extra2], function () {return b;});};};');
+            'var getX = function getX(extra1, extra2) {return function (store) {return Reselect.memoize("Unknown:getX", [extra1, extra2], [store["in"]], function () {return b;});};};');
     });
 });
 
