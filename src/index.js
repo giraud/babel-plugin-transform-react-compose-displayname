@@ -34,21 +34,30 @@ export default function build({types: t}) {
                         if (t.isIdentifier(callee.object) && callee.object.name === "Reselect") {
                             if (path.node.arguments.length > 1 && !t.isStringLiteral(path.node.arguments[0])) {
                                 // We found a call expression : Reselect.memoize??(x, y, ...)
-                                let parentFunctionNode = path.getFunctionParent().node;
+                                let parentFunctionPath = path.getFunctionParent();
+                                let parentFunctionNode = parentFunctionPath.node;
                                 if (parentFunctionNode) {
-                                    let name = t.isIdentifier(parentFunctionNode.id) ? parentFunctionNode.id.name: "anonymous";
+                                    let name = t.isIdentifier(parentFunctionNode.id) ? parentFunctionNode.id.name : "anonymous";
                                     let extraParams = [];
-                                    // if parent function, add params as extra inputs
-                                    let grandParentFunction = path.getFunctionParent().getFunctionParent();
-                                    if (grandParentFunction) {
-                                        if (grandParentFunction.node.params && grandParentFunction.node.params.length > 0) {
-                                            // var x = function(y) { ... }
-                                            extraParams = grandParentFunction.node.params
-                                            if (t.isIdentifier(grandParentFunction.node.id)) {
-                                                name = grandParentFunction.node.id.name;
-                                            } else {
-                                                if (t.isVariableDeclarator(grandParentFunction.parent)) {
-                                                    name = grandParentFunction.parent.id.name;
+
+                                    // if parent function is assigned to a variable, don't go further
+                                    if (t.isVariableDeclarator(parentFunctionPath.parent)) {
+                                        name = parentFunctionPath.parent.id.name;
+                                    }
+                                    else {
+                                        // if parent function, add params as extra inputs
+                                        let grandParentFunctionPath = parentFunctionPath.getFunctionParent();
+                                        if (grandParentFunctionPath) {
+                                            if (grandParentFunctionPath.node.params && grandParentFunctionPath.node.params.length > 0) {
+                                                // var x = function(y) { ... }
+                                                extraParams = grandParentFunctionPath.node.params
+                                                if (t.isIdentifier(grandParentFunctionPath.node.id)) {
+                                                    name = grandParentFunctionPath.node.id.name;
+                                                }
+                                                else {
+                                                    if (t.isVariableDeclarator(grandParentFunctionPath.parent)) {
+                                                        name = grandParentFunctionPath.parent.id.name;
+                                                    }
                                                 }
                                             }
                                         }
@@ -62,7 +71,10 @@ export default function build({types: t}) {
 
                                     let inputs = [].concat(path.node.arguments); // create new array
                                     let computeFunction = inputs.pop();
-                                    let newArgs = [t.stringLiteral(moduleName + ':' + functionName), t.arrayExpression(extraParams), t.arrayExpression(inputs), computeFunction];
+                                    let newArgs = [
+                                        t.stringLiteral(moduleName + ':' + functionName), t.arrayExpression(extraParams), t.arrayExpression(inputs),
+                                        computeFunction
+                                    ];
 
                                     path.replaceWith(t.callExpression( //
                                         t.memberExpression(t.identifier('Reselect'), t.identifier('memoize')), newArgs));

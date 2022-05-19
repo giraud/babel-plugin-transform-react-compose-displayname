@@ -67,6 +67,11 @@ const MyComp = reactStamp(React).compose({
 MyComp.displayName = 'MyComp';
 ```
 
+# Links
+
+- [babel plugin handbook](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md)
+- [specs](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md)
+
 # License
 
 MIT

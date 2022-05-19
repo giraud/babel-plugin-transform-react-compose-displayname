@@ -41,6 +41,13 @@ describe("Memoization", () => {
         assert.equal(result,
             'var getX = function getX(extra1, extra2) {return function (store) {return Reselect.memoize("Unknown:getX", [extra1, extra2], [store["in"]], function () {return b;});};};');
     });
+
+    it("should stop at variable declaration", () => {
+        let code = "function MakeSelector(S) { var getX = function(store) { return Reselect.memoize1(store.in, function() { return b; }); }; };";
+        let result = flatten(transformCode(code, [""]).code);
+        assert.equal(result,
+            'function MakeSelector(S) {var getX = function getX(store) {return Reselect.memoize("Unknown:getX", [], [store["in"]], function () {return b;});};};');
+    });
 });
 
 describe('Using reactStamp method', () => {
